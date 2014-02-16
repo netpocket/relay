@@ -1,0 +1,19 @@
+{
+  "name": "ncc-relay",
+  "version": "0.0.0",
+  "description": "An http service that handles websocket communication from multiple netpocket devices and browser sessions.",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha test/**/*.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "netpocket"
+  ],
+  "author": "Keyvan Fatehi",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "primus": "~2.0.2",
+    "sockjs": "~0.3.8"
+  }
+}

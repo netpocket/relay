@@ -35,7 +35,7 @@ if (cluster.isMaster) {
     , http = require('http')
     , domain = require('domain')
     , server = http.createServer()
-    , primusSpec = { transformer: 'sockjs', parser: 'json' }
+    , primusSpec = { transformer: 'sockjs', parser: 'json', strategy: false }
     , primus = new Primus(server, primusSpec);
 
   primus.on('connection', function connection(spark) {

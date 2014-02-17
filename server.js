@@ -72,6 +72,12 @@ if (cluster.isMaster) {
 
     d.add(spark);
 
+    var emit = function() {
+      var args = Array.prototype.slice.call(arguments, 0);
+      console.log("emitting", args);
+      spark.write({args:args});
+    };
+
     d.run(function() {
       spark.on('data', function (data) {
         if (spark.reserved(data.args[0])) return;
@@ -86,9 +92,8 @@ if (cluster.isMaster) {
         console.log(Object.keys(connectedDevices));
       });
 
-      spark.write({
-        args: ["please identify"]
-      });
+      emit("please identify");
+
     });
   });
 

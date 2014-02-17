@@ -4,9 +4,12 @@ var config = {
   port: 1337
 };
 
+var connectedDevices = {};
+
 var bindSparkEvents = function(spark) {
-  spark.on('pong', function() {
-    console.log("pong");
+  spark.on('pong', function(data) {
+    connectedDevices[data.macAddress] = spark;
+    console.log(Object.keys(connectedDevices));
   });
 };
 

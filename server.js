@@ -1,4 +1,13 @@
 'use strict';
+try {
+  var memwatch = require('memwatch');
+  memwatch.on('leak', function(info) {
+    console.log("leak", info);
+  });
+  console.log("Watching for memory leaks");
+} catch (e) {
+  console.log("Not watching for memory leaks -- npm install memwatch to do so");
+}
 
 var config = {
   port: 1337
@@ -7,7 +16,7 @@ var config = {
 var connectedDevices = {};
 
 var bindSparkEvents = function(spark) {
-  spark.on('pong', function(data) {
+  spark.on('my identity', function(data) {
     connectedDevices[data.macAddress] = spark;
     console.log(Object.keys(connectedDevices));
   });
@@ -27,7 +36,7 @@ primus.on('connection', function connection(spark) {
   console.log("New device connected");
   bindSparkEvents(spark);
   spark.write({
-    args: ["ping"]
+    args: ["please identify"]
   });
 });
 

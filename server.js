@@ -92,6 +92,14 @@ if (cluster.isMaster) {
         console.log(Object.keys(connectedDevices));
       });
 
+      spark.on('i am a web browser', function(token, info) {
+        connectedBrowsers[token] = {
+          info: info,
+          spark: spark
+        };
+        console.log(Object.keys(connectedBrowsers));
+      });
+
       emit("please identify");
 
     });

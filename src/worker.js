@@ -1,4 +1,4 @@
-var Worker = (function(connections, config) {
+var Worker = (function(cluster, connections, config) {
   "use strict";
 
   var Primus = require('primus'),

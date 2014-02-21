@@ -5,12 +5,6 @@
     port: 1337
   };
 
-  // Move this to Redis
-  var connections = {
-    devices: {},
-    browsers: {},
-  };
-
   var cluster = require('cluster');
   if (cluster.isMaster) {
 
@@ -36,7 +30,7 @@
     }
 
     var Worker = require('./src/worker.js'),
-    worker = new Worker(connections, config);
+    worker = new Worker(config);
 
     worker.listen();
   }

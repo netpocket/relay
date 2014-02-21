@@ -1,7 +1,12 @@
 var Connection = require('./connection.js');
 
-var Worker = (function(connections, config) {
+var Worker = (function(config) {
   "use strict";
+
+  var conns = {
+    browsers: {},
+    devices: {}
+  };
 
   var Primus = require('primus'),
       http = require('http'),
@@ -19,7 +24,7 @@ var Worker = (function(connections, config) {
         // make sure we close down within 30 seconds
         var killtimer = setTimeout(function() {
           process.exit(1);
-        }, 5000);
+        }, 30000);
         // But don't keep the process open just for that!
         killtimer.unref();
 
@@ -50,8 +55,7 @@ var Worker = (function(connections, config) {
         spark.emit.apply(spark, data.args);
       });
       
-      var connection = new Connection(spark, connections);
-      
+      var connection = new Connection(spark, conns);
 
     });
   });

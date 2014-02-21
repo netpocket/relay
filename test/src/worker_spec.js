@@ -2,10 +2,12 @@ require('../spec_helper.js');
 Worker = require('../../src/worker.js');
 
 describe("Worker", function() {
-  worker = null;
+  var config = null,
+      worker = null;
   
   beforeEach(function() {
-    worker = new Worker();
+    config = {port:1337};
+    worker = new Worker(config);
   });
 
   it("should be ok", function() {

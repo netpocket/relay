@@ -11,8 +11,10 @@ describe("Connection", function() {
       on: sinon.stub(),
       write: sinon.stub()
     };
-    redis = sinon.stub();
-    conn = new Connection(spark, redis);
+    db = {
+      ident: sinon.stub()
+    }
+    conn = new Connection(spark, db);
   });
 
   it("listens for a identification as a web browser", function() {

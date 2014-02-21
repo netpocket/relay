@@ -1,26 +1,25 @@
-var Connection = (function(spark, connections) {
+var Connection = (function(spark, conns) {
   "use strict";
 
   var emit = function() {
     var args = Array.prototype.slice.call(arguments, 0);
-    console.log("emitting", args);
     spark.write({args:args});
   };
 
   spark.on('i am a netpocketos device', function(token, info) {
-    connections.devices[token] = {
+    conns.devices[token] = {
       info: info,
       spark: spark
     };
-    console.log(Object.keys(connections.devices));
+    console.log(Object.keys(conns.devices));
   });
 
   spark.on('i am a web browser', function(token, info) {
-    connections.browsers[token] = {
+    conns.browsers[token] = {
       info: info,
       spark: spark
     };
-    console.log(Object.keys(connections.browsers));
+    console.log(Object.keys(conns.browsers));
   });
 
   emit("please identify");

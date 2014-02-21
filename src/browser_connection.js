@@ -1,9 +1,11 @@
 var BrowserConnection = (function(conn) {
-  var emit = conn.emit;
 
 
-
-  emit(conn.conns.devices);
+  conn.emit('here take these devices', _.map(Object.keys(conn.conns.devices), function(id) {
+    return {
+      id: id
+    };
+  }));
 });
 
 module.exports = BrowserConnection;

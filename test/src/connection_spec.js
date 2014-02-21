@@ -43,18 +43,12 @@ describe("Connection", function() {
 
   describe("a web browser identifies itself", function() {
     beforeEach(function() {
-      sinon.stub(conn, 'emit');
       spark.on.getCall(1).args[1]('user token', 'user data');
       entry = conns.browsers['user token'];
     });
 
     it("adds a new browser connection", function() {
       expect(entry).to.be.an.instanceof(BrowserConnection);
-    });
-
-    it("sends the currently connected devices", function() {
-      expect(conn.emit).to.have.been.calledWith(conns.devices);
-      expect(conn.emit).to.have.been.calledOnce;
     });
   });
 

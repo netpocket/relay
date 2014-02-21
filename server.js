@@ -1,4 +1,3 @@
-'use strict';
 try {
   var memwatch = require('memwatch');
   memwatch.on('leak', function(info) {
@@ -14,8 +13,8 @@ var config = {
 };
 
 // Move this to Redis
-var connectedDevices = {}
-  , connectedBrowsers = {};
+var connectedDevices = {},
+    connectedBrowsers = {};
 
 var cluster = require('cluster');
 if (cluster.isMaster) {
@@ -31,14 +30,15 @@ if (cluster.isMaster) {
 } else {
   // the worker
 
-  var Primus = require('primus')
-    , http = require('http')
-    , domain = require('domain')
-    , server = http.createServer()
-    , primusSpec = { transformer: 'sockjs', parser: 'json' }
-    , primus = new Primus(server, primusSpec);
+  var Primus = require('primus'),
+      http = require('http'),
+      domain = require('domain'),
+      server = http.createServer(),
+      primusSpec = { transformer: 'sockjs', parser: 'json' },
+      primus = new Primus(server, primusSpec);
 
   primus.on('connection', function connection(spark) {
+    "use strict";
 
     var d = domain.create();
 

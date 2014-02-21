@@ -38,8 +38,7 @@ describe("Connection", function() {
   });
 
   it("solicits identification", function() {
-    expect(spark.write).to.have.been.calledWith({args:['please identify']});
-    expect(spark.write).to.have.been.calledOnce;
+    expect(spark).to.write('please identify').and.writeOnce;
   });
 
   describe("a web browser identifies itself", function() {
@@ -47,10 +46,6 @@ describe("Connection", function() {
       sinon.stub(conn, 'emit');
       spark.on.getCall(1).args[1]('user token', 'user data');
       entry = conns.browsers['user token'];
-    });
-
-    afterEach(function() {
-      conn.emit.reset();
     });
 
     it("adds a new browser connection", function() {

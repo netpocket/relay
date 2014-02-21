@@ -2,7 +2,7 @@ require('../spec_helper.js');
 var Connection = require('../../src/connection.js');
 var BrowserConnection = require('../../src/browser_connection.js');
 
-describe("Connection", function() {
+describe("Browser Connection", function() {
   var conn = null,
       spark = null,
       conns = null;

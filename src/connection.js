@@ -1,4 +1,10 @@
 var BrowserConnection = require('./browser_connection.js');
+var DeviceConnection = require('./device_connection.js');
+
+/*
+var _ = require('underscore')._,
+  backbone = require('backbone');
+*/
 
 var Connection = (function(spark, conns) {
   "use strict";
@@ -12,11 +18,11 @@ var Connection = (function(spark, conns) {
   };
 
   spark.on('i am a netpocketos device', function(token, info) {
-    conns.devices[token] = self;
+    conns.devices[token] = new DeviceConnection(self, token, info);
   });
 
   spark.on('i am a web browser', function(token, info) {
-    conns.browsers[token] = new BrowserConnection(self);
+    conns.browsers[token] = new BrowserConnection(self, token, info);
   });
 
   this.emit("please identify");

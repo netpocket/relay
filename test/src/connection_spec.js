@@ -1,6 +1,7 @@
 require('../spec_helper.js');
 var Connection = require('../../src/connection.js');
 var BrowserConnection = require('../../src/browser_connection.js');
+var DeviceConnection = require('../../src/device_connection.js');
 
 describe("Connection", function() {
   var conn = null,
@@ -58,8 +59,8 @@ describe("Connection", function() {
       entry = conns.devices['device token'];
     });
 
-    it("adds it to the list of device connections", function() {
-      expect(entry).to.eq(conn);
+    it("adds a new device connection", function() {
+      expect(entry).to.be.an.instanceof(DeviceConnection);
     });
   });
 });

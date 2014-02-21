@@ -14,7 +14,8 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "primus": "~2.0.2",
-    "sockjs": "~0.3.8"
+    "sockjs": "~0.3.8",
+    "underscore": "~1.6.0"
   },
   "devDependencies": {
     "chai": "~1.9.0",

@@ -36,7 +36,7 @@
     }
 
     var Worker = require('./src/worker.js'),
-    worker = new Worker(cluster, connections, config);
+    worker = new Worker(connections, config);
 
     worker.listen();
   }

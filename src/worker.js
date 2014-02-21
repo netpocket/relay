@@ -1,4 +1,6 @@
-var Worker = (function(cluster, connections, config) {
+var Connection = require('./connection.js');
+
+var Worker = (function(connections, config) {
   "use strict";
 
   var Primus = require('primus'),
@@ -27,6 +29,7 @@ var Worker = (function(cluster, connections, config) {
         // Let the master know we're dead.  This will trigger a
         // 'disconnect' in the cluster master, and then it will fork
         // a new worker.
+        var cluster = require('cluster');
         cluster.worker.disconnect();
 
         // try to send an error to the request that triggered the problem
@@ -41,35 +44,14 @@ var Worker = (function(cluster, connections, config) {
 
     d.add(spark);
 
-    var emit = function() {
-      var args = Array.prototype.slice.call(arguments, 0);
-      console.log("emitting", args);
-      spark.write({args:args});
-    };
-
     d.run(function() {
       spark.on('data', function (data) {
         if (spark.reserved(data.args[0])) return;
         spark.emit.apply(spark, data.args);
       });
-
-      spark.on('i am a netpocketos device', function(token, info) {
-        connections.devices[token] = {
-          info: info,
-          spark: spark
-        };
-        console.log(Object.keys(connections.devices));
-      });
-
-      spark.on('i am a web browser', function(token, info) {
-        connections.browsers[token] = {
-          info: info,
-          spark: spark
-        };
-        console.log(Object.keys(connections.browsers));
-      });
-
-      emit("please identify");
+      
+      var connection = new Connection(spark, connections);
+      
 
     });
   });

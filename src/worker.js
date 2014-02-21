@@ -1,4 +1,4 @@
-module.exports = (function(connections, config) {
+var Worker = (function(connections, config) {
   "use strict";
 
   var Primus = require('primus'),
@@ -74,10 +74,10 @@ module.exports = (function(connections, config) {
     });
   });
 
-
   this.listen = function() {
     server.listen(config.port);
     console.log("Listening on "+config.port);
-  }
+  };
 });
 
+module.exports = Worker;

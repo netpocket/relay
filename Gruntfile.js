@@ -1,8 +1,7 @@
 var sources = [
   'Gruntfile.js',
   'server.js',
-  'src/**/*.js',
-  'test/**/*.js'
+  'src/**/*.js'
 ];
 
 module.exports = function(grunt) {
@@ -28,7 +27,7 @@ module.exports = function(grunt) {
 
     watch: {
       scripts: {
-        files: sources,
+        files: sources.concat('test/**/*.js'),
         tasks: ['default']
       }
     }

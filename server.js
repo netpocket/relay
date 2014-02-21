@@ -1,40 +1,43 @@
-var config = {
-  port: 1337
-};
+(function() {
+  "use strict";
 
-// Move this to Redis
-var connections = {
-  devices: {},
-  browsers: {},
-};
+  var config = {
+    port: 1337
+  };
 
-var cluster = require('cluster');
-if (cluster.isMaster) {
+  // Move this to Redis
+  var connections = {
+    devices: {},
+    browsers: {},
+  };
 
-  // One worker for now -- but later can check # of cpus
-  cluster.fork();
+  var cluster = require('cluster');
+  if (cluster.isMaster) {
 
-  cluster.on('disconnect', function(worker) {
-    console.error("disconnect!");
+    // One worker for now -- but later can check # of cpus
     cluster.fork();
-  });
 
-} else {
-  // the worker
-
-  try {
-    var memwatch = require('memwatch');
-    memwatch.on('leak', function(info) {
-      console.log("leak", info);
+    cluster.on('disconnect', function(worker) {
+      console.error("disconnect!");
+      cluster.fork();
     });
-    console.log("Watching for memory leaks");
-  } catch (e) {
-    console.log("Not watching for memory leaks -- npm install memwatch to do so");
+
+  } else {
+    // the worker
+
+    try {
+      var memwatch = require('memwatch');
+      memwatch.on('leak', function(info) {
+        console.log("leak", info);
+      });
+      console.log("Watching for memory leaks");
+    } catch (e) {
+      console.log("Not watching for memory leaks -- npm install memwatch to do so");
+    }
+
+    var Worker = require('./src/worker.js'),
+    worker = new Worker(connections, config);
+
+    worker.listen();
   }
-
-  var App = require('./src/app.js'),
-      app = new App(connections, config);
-
-  app.listen();
-}
-
+})();

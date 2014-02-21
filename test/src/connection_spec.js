@@ -20,6 +20,10 @@ describe("Connection", function() {
     conns = { devices: {}, browsers: {} };
   });
 
+  it("saves the spark", function() {
+    expect(conn.spark).to.eq(spark);
+  });
+
   it("listens for a identification as a web browser", function() {
     expect(spark.on.getCall(1).args[0]).to.eq('i am a web browser');
   });
@@ -39,12 +43,8 @@ describe("Connection", function() {
       entry = conns.browsers['user token'];
     });
 
-    it("adds it to the list of browser connections", function() {
-      expect(entry).to.be.ok;
-    });
-
-    it("stores its sent data", function() {
-      expect(entry.info).to.eq('user data');
+    it("adds itself to the list of browser connections", function() {
+      expect(entry).to.eq(conn);
     });
   });
 
@@ -55,12 +55,7 @@ describe("Connection", function() {
     });
 
     it("adds it to the list of device connections", function() {
-      expect(entry).to.be.ok;
-    });
-
-
-    it("stores its sent data", function() {
-      expect(entry.info).to.eq('device data');
+      expect(entry).to.eq(conn);
     });
   });
 });

@@ -9,7 +9,10 @@ module.exports = function(grunt) {
     simplemocha: {
       options: {
         timeout: 3000,
-        globals: ['expect'],
+        globals: [
+          'expect',
+          'sinon'
+        ],
         ignoreLeaks: false,
         ui: 'bdd',
         reporter: 'dot'

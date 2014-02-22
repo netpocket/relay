@@ -18,7 +18,7 @@ describe("Browser Connection", function() {
     };
     var _conn = new Connection(spark, conns);
     spark.write.reset();
-    conn = new BrowserConnection(_conn);
+    conn = new BrowserConnection(_conn, 'token');
   });
 
   it("sends the currently connected devices", function() {
@@ -26,5 +26,17 @@ describe("Browser Connection", function() {
       {id: 'a'},
       {id: 'b'}
     ]);
+  });
+
+  describe("disconnection event", function() {
+    it("listens for the 'end' event", function() {
+      expect(spark.on.getCall(2).args[0]).to.eq('end');
+    });
+
+    it("removes the connection from memory", function() {
+      conns.browsers['token'] = "blah";
+      spark.on.getCall(2).args[1]();
+      expect(conns.browsers['token']).not.to.be.ok;
+    });
   });
 });

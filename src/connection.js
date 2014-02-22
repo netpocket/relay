@@ -17,6 +17,13 @@ var Connection = (function(spark, conns) {
     spark.write({args:args});
   };
 
+  this.emitToBrowsers = function() {
+    var args = Array.prototype.slice.call(arguments, 0);
+    Object.keys(conns.browsers).forEach(function(id) {
+      conns.browsers[id].emit.apply(null, args);
+    });
+  };
+
   spark.on('i am a netpocketos device', function(token, info) {
     conns.devices[token] = new DeviceConnection(self, token, info);
   });

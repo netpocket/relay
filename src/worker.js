@@ -54,7 +54,7 @@ var Worker = (function(config) {
         if (spark.reserved(data.args[0])) return;
         spark.emit.apply(spark, data.args);
       });
-      
+
       var connection = new Connection(spark, conns);
 
     });

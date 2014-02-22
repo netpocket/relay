@@ -28,8 +28,8 @@ var Connection = (function(spark, conns) {
     conns.devices[token] = new DeviceConnection(self, token, attributes);
   });
 
-  spark.on('i am a web browser', function(token, info) {
-    conns.browsers[token] = new BrowserConnection(self, token, info);
+  spark.on('i am a web browser', function(token) {
+    conns.browsers[token] = new BrowserConnection(self, token);
   });
 
   this.emit("please identify");

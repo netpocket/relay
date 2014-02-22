@@ -1,6 +1,7 @@
 var _ = require('underscore');
 
 var DeviceConnection = (function(conn, token, attributes) {
+  this.attributes = attributes;
 
   conn.emitToBrowsers('a wild device appears', { id: token }, attributes);
 

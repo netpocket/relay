@@ -35,8 +35,28 @@ describe("Device Connection", function() {
     conn = new DeviceConnection(_conn, 'device token');
   });
 
-  it("tells connected browsers that this device connected", function() {
-    expect(sparkA).to.write('a wild device appears', {id: 'device token'});
-    expect(sparkB).to.write('a wild device appears', {id: 'device token'});
+  describe("connection event", function() {
+    it("notifies browsers", function() {
+      expect(sparkA).to.write('a wild device appears', {id: 'device token'});
+      expect(sparkB).to.write('a wild device appears', {id: 'device token'});
+    });
+  });
+
+  describe("disconnection event", function() {
+    it("listens for the 'end' event", function() {
+      expect(spark.on.getCall(2).args[0]).to.eq('end');
+    });
+
+    it("notifies browsers", function() {
+      spark.on.getCall(2).args[1]();
+      expect(sparkA).to.write('a wild device disconnected', {id: 'device token'});
+      expect(sparkB).to.write('a wild device disconnected', {id: 'device token'});
+    });
+
+    it("removes the connection from memory", function() {
+      conns.devices['device token'] = "the device";
+      spark.on.getCall(2).args[1]();
+      expect(conns.devices['device token']).not.to.be.ok;
+    });
   });
 });

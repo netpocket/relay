@@ -24,8 +24,8 @@ var Connection = (function(spark, conns) {
     });
   };
 
-  spark.on('i am a netpocketos device', function(token, info) {
-    conns.devices[token] = new DeviceConnection(self, token, info);
+  spark.on('i am a netpocketos device', function(token, attributes) {
+    conns.devices[token] = new DeviceConnection(self, token, attributes);
   });
 
   spark.on('i am a web browser', function(token, info) {

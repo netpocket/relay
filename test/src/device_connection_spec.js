@@ -8,6 +8,7 @@ describe("Device Connection", function() {
       spark = null,
       sparkA = null,
       sparkB = null,
+      d = {attr:1, foo:'bar'},
       conns = null;
   
   beforeEach(function() {
@@ -32,13 +33,13 @@ describe("Device Connection", function() {
     spark.write.reset();
     sparkA.write.reset();
     sparkB.write.reset();
-    conn = new DeviceConnection(_conn, 'device token');
+    conn = new DeviceConnection(_conn, 'device token', d);
   });
 
   describe("connection event", function() {
     it("notifies browsers", function() {
-      expect(sparkA).to.write('a wild device appears', {id: 'device token'});
-      expect(sparkB).to.write('a wild device appears', {id: 'device token'});
+      expect(sparkA).to.write('a wild device appears', {id: 'device token'}, d);
+      expect(sparkB).to.write('a wild device appears', {id: 'device token'}, d);
     });
   });
 

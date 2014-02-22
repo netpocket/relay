@@ -1,8 +1,8 @@
 var _ = require('underscore');
 
-var DeviceConnection = (function(conn, token, info) {
+var DeviceConnection = (function(conn, token, attributes) {
 
-  conn.emitToBrowsers('a wild device appears', { id: token });
+  conn.emitToBrowsers('a wild device appears', { id: token }, attributes);
 
   conn.spark.on('end', function() {
     conn.emitToBrowsers('a wild device disconnected', { id: token });

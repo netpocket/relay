@@ -4,6 +4,7 @@ var BrowserConnection = require('../../src/browser_connection.js');
 
 describe("Browser Connection", function() {
   var conn = null,
+      d = {attr:1, foo:'bar'},
       spark = null,
       conns = null;
   
@@ -22,10 +23,8 @@ describe("Browser Connection", function() {
   });
 
   it("sends the currently connected devices", function() {
-    expect(spark).to.write('here take these devices', [
-      {id: 'a'},
-      {id: 'b'}
-    ]);
+    expect(spark).to.have.written('a wild device appears', {id: 'a'}, {});
+    expect(spark).to.have.written('a wild device appears', {id: 'a'}, {});
   });
 
   describe("disconnection event", function() {

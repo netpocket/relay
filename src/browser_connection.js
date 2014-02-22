@@ -2,9 +2,9 @@ var _ = require('underscore');
 
 var BrowserConnection = (function(conn, token, info) {
 
-  conn.emit('here take these devices', _.map(Object.keys(conn.conns.devices), function(id) {
-    return { id: id }; // Could use backbone collection here
-  }));
+  for (var dToken in conn.conns.devices) {
+    conn.emit('a wild device appears', { id: dToken }, { /* missing attributes! */ });
+  }
 
   conn.spark.on('end', function() {
     conn.conns.browsers[token] = null;

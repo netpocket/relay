@@ -4,6 +4,7 @@ chai.use(sinonChai);
 
 _ = require('underscore');
 
+/* Assert that it just wrote */
 chai.Assertion.addMethod('write', function(){
   var obj = this._obj;
   var args = Array.prototype.slice.call(arguments, 0);
@@ -28,6 +29,31 @@ chai.Assertion.addProperty('writeOnce', function(){
     act
   );
 });
+
+/* Assert that it was written at some point in the spy's lifetime */
+chai.Assertion.addMethod('written', function(){
+  var obj = this._obj;
+  var args = Array.prototype.slice.call(arguments, 0);
+  var everWrote = function() {
+    for (var i = 0, l = obj.write.callCount; i < l; i ++) {
+      var test = obj.write.getCall(i).args[0].args;
+      if (_.isEqual(test, args)) {
+        return true;
+      } 
+    }
+    return false;
+    //_.isEqual(obj.write.getCall(obj.write.callCount-1).args[0].args, args)
+  };
+  this.assert(
+    everWrote(),
+    "expected to have written #{exp} but it never did",
+    "expected not to have ever written #{act}, but it did",
+    args[0],
+    obj.write.getCall(0).args[0].args,
+    true
+  );
+});
+
 
 global.expect = chai.expect;
 global.sinon = require('sinon');

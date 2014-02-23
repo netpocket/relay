@@ -19,6 +19,7 @@ Connections = Backbone.Collection.extend({
   emitToBrowsers: function() {
     var args = Array.prototype.slice.call(arguments, 0);
     _.each(this.where({model:'browser'}), function(c) {
+      console.log("Emitting to browser");
       c.emit.apply(c, args);
     }.bind(this));
   },

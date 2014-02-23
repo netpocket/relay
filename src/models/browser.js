@@ -7,7 +7,7 @@ var Backbone = require("backbone"), Browser = null;
 
     continue: function(conn, conns) {
       conns.deviceConnections(function(dConn) {
-        conn.spark.on('device:'+dConn.get('id'), function relay(payload) {
+        conn.spark.on(dConn.get('identifier'), function relay(payload) {
           var identifier = conn.get('identifier');
           if (payload.listen === "once") {
             dConn.spark.once(identifier, conn.emit.bind(conn));
@@ -17,6 +17,7 @@ var Backbone = require("backbone"), Browser = null;
           dConn.emit('relay', identifier, payload);
         }.bind(this));
 
+        console.log("browser iterating devices");
         conn.emit(
           'a wild device appears',
           dConn.export(),

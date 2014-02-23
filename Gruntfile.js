@@ -38,8 +38,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', [
     'jshint',
-   // 'simplemocha',
-    //'cover',
+    'simplemocha',
+    'cover',
     'watch'
   ]);
 

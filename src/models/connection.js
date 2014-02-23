@@ -9,7 +9,7 @@ Browser = require('./browser.js');
 
     export: function() {
       return {
-        id: this.get('id')
+        id: this.get('token')
       };
     },
 
@@ -38,17 +38,17 @@ Browser = require('./browser.js');
     },
 
     isDevice: function(token, attributes) {
-      this.set('id', token);
+      this.set('token', token);
       this.set('model', 'device');
-      this.set('identifier', this.get('model')+':'+this.get('id'));
+      this.set('identifier', this.get('model')+':'+token);
       this.model = new Device(attributes);
       this.identified(token);
     },
 
     isBrowser: function(token, attributes) {
-      this.set('id', token);
+      this.set('token', token);
       this.set('model', 'browser');
-      this.set('identifier', this.get('model')+':'+this.get('id'));
+      this.set('identifier', this.get('model')+':'+token);
       this.model = new Browser(attributes);
       this.identified(token);
     },
@@ -58,6 +58,10 @@ Browser = require('./browser.js');
         this.model.finish(this, conns, this.finished);
       };
       this.model.continue(this, conns);
+    },
+
+    identified: function() {
+      // Override
     },
 
     finish: function() {

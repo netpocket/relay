@@ -19,14 +19,16 @@ describe("Device Connection", function() {
     };
     sparkB = {
       on: sinon.stub(),
+      once: sinon.stub(),
       write: sinon.stub()
     };
     conns.browsers = {
-      a: new BrowserConnection(new Connection(sparkA, conns)),
-      b: new BrowserConnection(new Connection(sparkB, conns)),
+      a: new BrowserConnection(new Connection(sparkA, conns), 'Ba'),
+      b: new BrowserConnection(new Connection(sparkB, conns), 'Bb'),
     };
     spark = {
       on: sinon.stub(),
+      once: sinon.stub(),
       write: sinon.stub()
     };
     var _conn = new Connection(spark, conns);
@@ -58,6 +60,37 @@ describe("Device Connection", function() {
       conns.devices['device token'] = "the device";
       spark.on.getCall(2).args[1]();
       expect(conns.devices['device token']).not.to.be.ok;
+    });
+  });
+
+  describe("gotMessage", function() {
+    var payload = null;
+
+    describe("browser requests uptime", function() {
+      beforeEach(function() {
+        payload = {
+          listen: "once",
+          cmd: "feature request",
+          args: [ "os", "get uptime" ]
+        };
+        conn.gotMessage.bind(conns.browsers.a)(payload);
+      });
+      it("creates a one-time listener on the device connection to capture the response", function() {
+        expect(spark.once.getCall(0).args[0]).to.eq('browser:Ba');
+      });
+
+      it("forwards the payload to the device itself", function() {
+        expect(spark).to.write('relay', 'browser:Ba', payload);
+      });
+
+      it("funnels the response back up to the browser connection", function() {
+        var resPayload = {
+          cmd: "feature response",
+          args: [ null, '12345' ]
+        };
+        spark.once.getCall(0).args[1](resPayload);
+        expect(sparkA).to.write(resPayload);
+      });
     });
   });
 });

@@ -50,4 +50,11 @@ describe("Browser Connection", function() {
       expect(conns.browsers['token']).not.to.be.ok;
     });
   });
+
+  describe("device-intended messages", function() {
+    it("listens for messages intended for a specific device", function() {
+      expect(spark.on.getCall(3).args[0]).to.eq('device:tokA');
+      expect(spark.on.getCall(4).args[0]).to.eq('device:tokB');
+    });
+  });
 });

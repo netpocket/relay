@@ -4,16 +4,17 @@ Connections = Backbone.Collection.extend({
   model: require('../models/connection.js'),
 
   track: function(connection) {
-    this.removeWhere({id: connection.get('id')});
-    this.add(connection);
-    connection.continue(this);
-    console.log(this.length);
+    this.removeWhere({token: connection.get('token')}, function() {
+      this.add(connection);
+      connection.continue(this);
+    }.bind(this));
   },
 
-  removeWhere: function(match) {
-    _.each(this.where(match), function(c) {
+  removeWhere: function(match, done) {
+    this.where(match).forEach(function(c) {
       this.remove(c);
     }.bind(this));
+    done();
   },
 
   emitToBrowsers: function() {

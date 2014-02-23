@@ -9,7 +9,8 @@ Browser = require('./browser.js');
 
     export: function() {
       return {
-        id: this.get('token')
+        id: this.get('token'),
+        model: this.get('model')
       };
     },
 
@@ -54,9 +55,7 @@ Browser = require('./browser.js');
     },
 
     continue: function(conns) {
-      this._finish = function() {
-        this.model.finish(this, conns, this.finished);
-      };
+      this.conns = conns;
       this.model.continue(this, conns);
     },
 
@@ -65,7 +64,7 @@ Browser = require('./browser.js');
     },
 
     finish: function() {
-      this._finish();
+      this.model.finish(this, this.conns, this.finished);
     }
 
   });

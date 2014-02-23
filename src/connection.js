@@ -14,6 +14,9 @@ var Connection = (function(spark, conns) {
 
   this.emit = function() {
     var args = Array.prototype.slice.call(arguments, 0);
+    if (process.env.NODE_ENV === "development") {
+      console.log('emitting', args);
+    }
     spark.write({args:args});
   };
 

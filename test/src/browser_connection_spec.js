@@ -15,10 +15,12 @@ describe("Browser Connection", function() {
     conns = { browsers: {} };
     sparkA = {
       on: sinon.stub(),
+      once: sinon.stub(),
       write: sinon.stub()
     };
     sparkB = {
       on: sinon.stub(),
+      once: sinon.stub(),
       write: sinon.stub()
     };
     conns.devices = {
@@ -27,6 +29,7 @@ describe("Browser Connection", function() {
     };
     spark = {
       on: sinon.stub(),
+      once: sinon.stub(),
       write: sinon.stub()
     };
     var _conn = new Connection(spark, conns);
@@ -55,6 +58,38 @@ describe("Browser Connection", function() {
     it("listens for messages intended for a specific device", function() {
       expect(spark.on.getCall(3).args[0]).to.eq('device:tokA');
       expect(spark.on.getCall(4).args[0]).to.eq('device:tokB');
+    });
+
+    var payload = null;
+
+    describe("browser requests uptime", function() {
+      beforeEach(function() {
+        payload = {
+          listen: "once",
+          cmd: "feature request",
+          args: [ "os", "get uptime" ]
+        };
+        spark.on.getCall(3).args[1](payload);
+      });
+
+      it("creates a one-time listener on the device connection", function() {
+        expect(sparkA.once.getCall(0).args[0]).to.eq('browser:token');
+      });
+
+      it("forwards the payload to the device", function() {
+        expect(sparkA).to.write('relay', 'browser:token', payload);
+      });
+
+      it("funnels the response back to the browser connection as though from the device", function() {
+        var resPayload = {
+          cmd: "feature response",
+          args: [ "os", "get uptime" ],
+          err: null,
+          res: '12345'
+        };
+        sparkA.once.getCall(0).args[1](resPayload);
+        expect(spark).to.write('device:tokA', resPayload);
+      });
     });
   });
 });

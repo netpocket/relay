@@ -13,19 +13,9 @@ var Backbone = require("backbone"), Device = null;
     },
 
     continue: function(conn, conns) {
-      /*
-      conns.browserConnections(function(bConn) {
-        bConn.spark.on('device:'+conn.get('id'), function relay(payload) {
-          var identifier = bConn.model.getIdentifier();
-          if (payload.listen === "once") {
-            conn.spark.once(identifier, bConn.emit);
-          } else {
-            console.error("Currently only handling 'once' for relay messages");
-          }
-          bConn.emit('relay', identifier, payload);
-        }.bind(this));
-      }.bind(this));
-*/
+
+      // Need to create a bridge here with the browsers
+
       conns.emitToBrowsers(
         'a wild device appears',
         conn.export(),

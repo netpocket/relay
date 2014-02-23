@@ -1,12 +1,10 @@
-var Connection = require('./connection.js');
+var Connection = require('./models/connection.js');
+var Connections = require('./collections/connections.js');
 
 var Worker = (function(config) {
   "use strict";
 
-  var conns = {
-    browsers: {},
-    devices: {}
-  };
+  var conns = new Connections();
 
   var Primus = require('primus'),
       http = require('http'),
@@ -21,10 +19,10 @@ var Worker = (function(config) {
     d.on('error', function(err) {
       console.log("error", err.stack);
       try {
-        // make sure we close down within 30 seconds
+        // make sure we close down within 10 seconds
         var killtimer = setTimeout(function() {
           process.exit(1);
-        }, 30000);
+        }, 10000);
         // But don't keep the process open just for that!
         killtimer.unref();
 
@@ -47,16 +45,19 @@ var Worker = (function(config) {
       }
     });
 
+    d.add(conns);
     d.add(spark);
 
     d.run(function() {
-      spark.on('data', function (data) {
-        if (spark.reserved(data.args[0])) return;
-        spark.emit.apply(spark, data.args);
-      });
-
-      var connection = new Connection(spark, conns);
-
+      var connection = new Connection(spark);
+      connection.identified = function() {
+        conns.track(connection);
+      };
+      connection.finished = function() {
+        conns.remove(connection);
+        console.log(conns.length);
+      };
+      connection.emit("please identify");
     });
   });
 

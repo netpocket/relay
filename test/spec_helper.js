@@ -54,7 +54,38 @@ chai.Assertion.addMethod('written', function(){
   );
 });
 
+/* Assert that an event emitter was told to listen with 'on' */
+chai.Assertion.addMethod('listenOn', function(){
+  var obj = this._obj;
+  var args = Array.prototype.slice.call(arguments, 0);
+  var test = null;
+  var wasToldToListenOn = function() {
+    for (var i = 0, l = obj.on.callCount; i < l; i ++) {
+      var test = obj.on.getCall(i).args[0];
+      if (_.isEqual(test, args[0])) {
+        return true;
+      } 
+    }
+    return false;
+  };
+  this.assert(
+    wasToldToListenOn(args[0]),
+    "expected to be told to listen for #{exp} but wasn't",
+    "expected not to be told to listen for #{exp}, it was",
+    args[0],
+    test,
+    true
+  );
+});
 
 global.expect = chai.expect;
 global.sinon = require('sinon');
 
+
+global.sparkSpy = function() {
+  return {
+    on: sinon.stub(),
+    once: sinon.stub(),
+    write: sinon.stub()
+  };
+};

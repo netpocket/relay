@@ -1,10 +1,10 @@
 {
   "name": "ncc-relay",
-  "version": "0.0.0",
-  "description": "An http service that handles websocket communication from multiple netpocket devices and browser sessions.",
+  "version": "1.0.0",
+  "description": "websocket middleman between browsers and netpocket clients",
   "main": "server.js",
   "scripts": {
-    "test": "mocha test/**/*.js",
+    "test": "mocha test/src/**/**/*_spec.js",
     "start": "node server.js"
   },
   "keywords": [

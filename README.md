@@ -1,31 +1,19 @@
-# Netpocket Control Center Relay
+# ncc-relay
 
-An http service that handles websocket communication from multiple
-netpocket devices and browser sessions.
+A service that handles websocket communication between
+netpocketos devices and ncc browser sessions.
 
-## Components
+By acting as a middleman it allows devices and browsers,
+which may both be behind their own firewalls, to seem
+as though they are communicating directly with one another.
 
-TBD
+It expects a specific protocol -- this can be understood
+by examining the specs of this project and netpocketos. Each
+project tests a side of the coin.
 
 ## Requirements
 
 * Node.js
-
-## Install
-
-### From Official Repository
-
-Not yet implemented
-
-### From Source Code
-
-clone it
-
-## Package
-
-`script/package`
-
-This creates a ncc-relay.deb installation file.
 
 ## Usage
 

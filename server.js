@@ -2,7 +2,7 @@
   "use strict";
 
   var config = {
-    port: 1337
+    port: process.env.PORT || 1337
   };
 
   var cluster = require('cluster');

@@ -1,6 +1,8 @@
 var chai = require('chai');
 var sinonChai = require('sinon-chai');
 chai.use(sinonChai);
+global.expect = chai.expect;
+global.sinon = require('sinon');
 
 _ = require('underscore');
 
@@ -78,14 +80,38 @@ chai.Assertion.addMethod('listenOn', function(){
   );
 });
 
-global.expect = chai.expect;
-global.sinon = require('sinon');
-
-
 global.sparkSpy = function() {
-  return {
+  var obj = {
     on: sinon.stub(),
     once: sinon.stub(),
     write: sinon.stub()
   };
+
+  /* Utility methods */
+
+  /* Get the callback for a listener 
+   * defined using EventEmitter's "on" method */
+  obj.onCallback = function(label) {
+    for (var i = 0, l = obj.on.callCount; i < l; i ++) {
+      var args = obj.on.getCall(i).args;
+      if (args[0] === label) {
+        return args[1];
+      }
+    }
+    throw new Error("spark was not listening on "+label);
+  };
+
+  /* Get the callback for a listener 
+   * defined using EventEmitter's "once" method */
+  obj.onceCallback = function(label) {
+    for (var i = 0, l = obj.once.callCount; i < l; i ++) {
+      var args = obj.once.getCall(i).args;
+      if (args[0] === label) {
+        return args[1];
+      }
+    }
+    throw new Error("spark was not listening once on "+label);
+  };
+
+  return obj;
 };

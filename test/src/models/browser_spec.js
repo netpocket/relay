@@ -29,7 +29,28 @@ describe("Browser Model", function() {
     // Setup connections
     conns = new Connections([ bConnA , bConnB, dConnA, dConnB ]);
 
+    sinon.stub(bConnA, 'emit');
+    sinon.stub(dConnA, 'emit');
+
     bConnA.continue(conns);
+  });
+
+  afterEach(function() {
+    dConnA.emit.restore();
+    bConnA.emit.restore();
+  });
+
+  it("is informed of currently connected devices", function() {
+    expect(bConnA.emit).to.have.been.calledWith(
+      'a wild device appears',
+      dConnA.export(),
+      dConnA.model.export()
+    );
+    expect(bConnA.emit).to.have.been.calledWith(
+      'a wild device appears',
+      dConnB.export(),
+      dConnB.model.export()
+    );
   });
 
   describe("communicate bridge", function() {
@@ -47,9 +68,6 @@ describe("Browser Model", function() {
     });
 
     it("works", function() {
-      sinon.stub(bConnA, 'emit');
-      sinon.stub(dConnA, 'emit');
-
       bConnA.spark.onCallback('device:1')({
         listen: "once"
       });
@@ -68,9 +86,6 @@ describe("Browser Model", function() {
         'device:1', 
         { the: 'response'}
       );
-
-      dConnA.emit.restore();
-      bConnA.emit.restore();
     });
   });
 });

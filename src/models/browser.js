@@ -9,11 +9,7 @@ Browser = null;
     continue: function(conn, conns) {
       conns.deviceConnections(function(dConn) {
         conns.bridge(dConn, conn);
-        conn.emit(
-          'a wild device appears',
-          dConn.export(),
-          dConn.model.export()
-        );
+        dConn.appearTo(conn);
       }.bind(this));
     },
 

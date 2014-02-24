@@ -16,20 +16,14 @@ Device = null;
     continue: function(conn, conns) {
       conns.browserConnections(function(bConn) {
         conns.bridge(conn, bConn);
-      }.bind(this));
-
-      conns.emitToBrowsers(
-        'a wild device appears',
-        conn.export(),
-        this.export()
-      );
+        conn.appearTo(bConn);
+      });
     },
 
     finish: function(conn, conns, done) {
-      conns.emitToBrowsers(
-        'a wild device disconnected',
-        conn.export()
-      );
+      conns.browserConnections(function(bConn) {
+        conn.disappearTo(bConn);
+      });
       done();
     }
 

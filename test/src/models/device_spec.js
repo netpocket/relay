@@ -90,5 +90,27 @@ describe("Device Model", function() {
       );
     });
   });
+
+  describe("disconnect", function() {
+    beforeEach(function() {
+      dConnA.finished = sinon.stub();
+      dConnA.finish();
+    });
+
+    it("calls finished()", function() {
+      expect(dConnA.finished).to.have.been.calledOnce;
+    });
+
+    it("informs currently connected browsers", function() {
+      expect(bConnA.emit).to.have.been.calledWith(
+        'a wild device disconnected',
+        dConnA.export()
+      );
+      expect(bConnB.emit).to.have.been.calledWith(
+        'a wild device disconnected',
+        dConnA.export()
+      );
+    });
+  });
 });
 

@@ -84,7 +84,9 @@ global.sparkSpy = function() {
   var obj = {
     on: sinon.stub(),
     once: sinon.stub(),
-    write: sinon.stub()
+    write: sinon.stub(),
+    reserved: sinon.stub(),
+    emit: sinon.stub()
   };
 
   /* Utility methods */

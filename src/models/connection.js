@@ -32,7 +32,7 @@ Browser = require('./browser.js');
 
     initialize: function(spark) {
       this.spark = spark;
-      spark.on('data', this.onData);
+      spark.on('data', this.onData.bind(spark));
       spark.on('i am a netpocketos device', this.isDevice.bind(this));
       spark.on('i am a web browser', this.isBrowser.bind(this));
       spark.on('end', this.finish.bind(this));
@@ -57,6 +57,21 @@ Browser = require('./browser.js');
     continue: function(conns) {
       this.conns = conns;
       this.model.continue(this, conns);
+    },
+
+    appearTo: function(otherConn) {
+      otherConn.emit(
+        'a wild '+this.get('model')+' appears',
+        this.export(),
+        this.model.export()
+      );
+    },
+
+    disappearTo: function(otherConn) {
+      otherConn.emit(
+        'a wild '+this.get('model')+' disconnected',
+        this.export()
+      );
     },
 
     identified: function() {

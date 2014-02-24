@@ -17,23 +17,12 @@ Connections = Backbone.Collection.extend({
     done();
   },
 
-  emitToBrowsers: function() {
-    var args = Array.prototype.slice.call(arguments, 0);
-    _.each(this.where({model:'browser'}), function(c) {
-      c.emit.apply(c, args);
-    }.bind(this));
-  },
-
   deviceConnections: function(cb) {
-    _.each(this.where({model:'device'}), function(c) {
-      cb(c);
-    });
+    _.each(this.where({model:'device'}), cb);
   },
 
   browserConnections: function(cb) {
-    _.each(this.where({model:'browser'}), function(c) {
-      cb(c);
-    });
+    _.each(this.where({model:'browser'}), cb);
   },
 
   bridge: function(conn, bConn) {

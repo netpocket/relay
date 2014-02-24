@@ -88,5 +88,16 @@ describe("Browser Model", function() {
       );
     });
   });
+
+  describe("disconnect", function() {
+    beforeEach(function() {
+      bConnA.finished = sinon.stub();
+      bConnA.finish();
+    });
+
+    it("calls finished()", function() {
+      expect(bConnA.finished).to.have.been.calledOnce;
+    });
+  });
 });
 

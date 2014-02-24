@@ -27,17 +27,50 @@ describe("Device Model", function() {
 
     // Setup connections
     conns = new Connections([ dConnA , dConnB, bConnA, bConnB ]);
+
+    dConnA.continue(conns);
   });
 
-  describe("continue()", function() {
-    beforeEach(function() {
-      dConnA.continue(conns);
-    });
-    it("sets up a communication bridge with all connected browsers", function() {
-      expect(dConnA.spark).not.to.listenOn('device:DA');
-      expect(dConnB.spark).not.to.listenOn('device:DA');
+  describe("communication bridge", function() {
+    it("makes browsers listen to this device", function() {
       expect(bConnA.spark).to.listenOn('device:DA');
       expect(bConnB.spark).to.listenOn('device:DA');
+    });
+
+    it("does not make other devices listen to this device", function() {
+      expect(dConnA.spark).not.to.listenOn('device:DA');
+      expect(dConnB.spark).not.to.listenOn('device:DA');
+    });
+
+    it("does not listen to itself", function() {
+      expect(dConnA.spark).not.to.listenOn('device:DA');
+    });
+
+    it("works", function() {
+      sinon.stub(dConnA, 'emit');
+      sinon.stub(bConnA, 'emit');
+
+      bConnA.spark.onCallback('device:DA')({
+        listen: "once"
+      });
+
+      expect(dConnA.emit).to.have.been.calledWith(
+        'relay',
+        'browser:BA', 
+        { listen: 'once' }
+      );
+
+      dConnA.spark.onceCallback('browser:BA')({
+        the: 'response'
+      });
+
+      expect(bConnA.emit).to.have.been.calledWith(
+        'device:DA', 
+        { the: 'response'}
+      );
+
+      bConnA.emit.restore();
+      dConnA.emit.restore();
     });
   });
 });

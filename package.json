@@ -19,9 +19,7 @@
     "backbone": "~1.1.2"
   },
   "devDependencies": {
-    "chai": "~1.9.0",
-    "sinon-chai": "~2.5.0",
-    "sinon": "~1.8.2",
+    "primus-sinon-chai": "~0.0.1",
     "mocha": "~1.17.1",
     "grunt-simple-mocha": "~0.4.0",
     "grunt": "~0.4.2",

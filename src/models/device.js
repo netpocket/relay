@@ -14,10 +14,13 @@ var Backbone = require("backbone"), Device = null;
 
     continue: function(conn, conns) {
       conns.browserConnections(function(bConn) {
+        // replace with Bridge
         bConn.spark.on(conn.get('identifier'), function relay(payload) {
           var identifier = bConn.get('identifier');
           if (payload.listen === "once") {
-            conn.spark.once(identifier, bConn.emit.bind(bConn));
+            conn.spark.once(identifier, function(res) {
+              bConn.emit(conn.get('identifier'), res);
+            });
           } else {
             console.error("Currently only handling 'once' for relay messages");
           }

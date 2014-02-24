@@ -20,7 +20,6 @@ Connections = Backbone.Collection.extend({
   emitToBrowsers: function() {
     var args = Array.prototype.slice.call(arguments, 0);
     _.each(this.where({model:'browser'}), function(c) {
-      console.log("Emitting to browser");
       c.emit.apply(c, args);
     }.bind(this));
   },
@@ -34,6 +33,20 @@ Connections = Backbone.Collection.extend({
   browserConnections: function(cb) {
     _.each(this.where({model:'browser'}), function(c) {
       cb(c);
+    });
+  },
+
+  bridge: function(conn, bConn) {
+    bConn.spark.on(conn.get('identifier'), function relay(payload) {
+      var identifier = bConn.get('identifier');
+      if (payload.listen === "once") {
+        conn.spark.once(identifier, function(res) {
+          bConn.emit(conn.get('identifier'), res);
+        });
+      } else {
+        console.error("Currently only handling 'once' for relay messages");
+      }
+      conn.emit('relay', identifier, payload);
     });
   }
 });

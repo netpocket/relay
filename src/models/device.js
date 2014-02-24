@@ -1,4 +1,5 @@
-var Backbone = require("backbone"), Device = null;
+var Backbone = require("backbone"),
+Device = null;
 
 (function() {
   "use strict";
@@ -14,18 +15,7 @@ var Backbone = require("backbone"), Device = null;
 
     continue: function(conn, conns) {
       conns.browserConnections(function(bConn) {
-        // replace with Bridge
-        bConn.spark.on(conn.get('identifier'), function relay(payload) {
-          var identifier = bConn.get('identifier');
-          if (payload.listen === "once") {
-            conn.spark.once(identifier, function(res) {
-              bConn.emit(conn.get('identifier'), res);
-            });
-          } else {
-            console.error("Currently only handling 'once' for relay messages");
-          }
-          conn.emit('relay', identifier, payload);
-        }.bind(this));
+        conns.bridge(conn, bConn);
       }.bind(this));
 
       conns.emitToBrowsers(

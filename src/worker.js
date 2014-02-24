@@ -13,7 +13,7 @@ var Worker = (function(config) {
       primusSpec = { transformer: 'sockjs', parser: 'json' },
       primus = new Primus(server, primusSpec);
 
-  primus.on('connection', function connection(spark) {
+  this.connection = function(spark) {
     var d = domain.create();
 
     d.on('error', function(err) {
@@ -55,16 +55,17 @@ var Worker = (function(config) {
       };
       connection.finished = function() {
         conns.remove(connection);
-        console.log(conns.length);
       };
       connection.emit("please identify");
     });
-  });
+  };
 
   this.listen = function() {
     server.listen(config.port);
     console.log("Listening on "+config.port);
   };
+
+  primus.on('connection', this.connection);
 });
 
 module.exports = Worker;

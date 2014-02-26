@@ -26,6 +26,7 @@ Connections = Backbone.Collection.extend({
   },
 
   bridge: function(conn, bConn) {
+    // Request/Reponse
     bConn.spark.on(conn.get('identifier'), function relay(payload) {
       var identifier = bConn.get('identifier');
       if (payload.listen === "once") {
@@ -36,6 +37,11 @@ Connections = Backbone.Collection.extend({
         console.error("Currently only handling 'once' for relay messages");
       }
       conn.emit('relay', identifier, payload);
+    });
+
+    // Model changes
+    conn.model.on('change', function(m) {
+      bConn.emit(conn.get('identifier')+':changed', m.changed);
     });
   }
 });

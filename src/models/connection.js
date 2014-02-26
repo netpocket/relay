@@ -43,6 +43,7 @@ Browser = require('./browser.js');
       this.set('model', 'device');
       this.set('identifier', this.get('model')+':'+token);
       this.model = new Device(attributes);
+      subscribeToModelChanges(this);
       this.identified(token);
     },
 
@@ -83,6 +84,14 @@ Browser = require('./browser.js');
     }
 
   });
+
+  var subscribeToModelChanges = function(conn) {
+    conn.spark.on(conn.get('identifier')+':changed', function(data) {
+      conn.model.set(data);
+    });
+  };
 }());
+
+
 
 module.exports = Connection;

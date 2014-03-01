@@ -61,7 +61,7 @@ var Worker = (function(config) {
   };
 
   this.listen = function() {
-    server.listen(config.port);
+    server.listen(config.port, '0.0.0.0');
     console.log("Listening on "+config.port);
   };
 

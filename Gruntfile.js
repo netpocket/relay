@@ -1,5 +1,4 @@
 var sources = [
-  'Gruntfile.js',
   'server.js',
   'src/**/*.js'
 ];
